@@ -1,0 +1,86 @@
+.container {
+  width: 600px;
+  margin: auto;
+}
+/* Chiều cao, chiều dài của phần tử sẽ bao gồm cả padding mà margin của nó */
+* {
+  box-sizing: border-box;
+}
+
+/* bouton Insert */
+.insertBtn {
+  padding: 10px;
+  width: 25%;
+  background: #d9d9d9;
+  color: #555;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.insertBtn:hover {
+  background-color: rgb(102, 100, 100);
+  color: whitesmoke;
+}
+
+.inputZone {
+  height: 40px;
+  width: 70%;
+  font-size: 20px;
+}
+
+h2 {
+  margin: 5px;
+}
+/* phần header của danh sách */
+.header {
+  background-color: #f44336;
+  padding: 30px 40px;
+  color: white;
+  text-align: center;
+}
+
+/* xóa bỏ padding và margin của thẻ ul*/
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* Định dạng các thẻ li */
+ul li {
+  cursor: pointer;
+  padding: 12px 8px 12px 40px;
+  background: #eee;
+  font-size: 24px;
+  transition: 0.2s;
+  list-style: none;
+}
+
+/* thiết lập các phần tử li lẻ một màu nền khác */
+ul li:nth-child(odd) {
+  background: #f9f9f9;
+}
+
+/* Đổi màu nền thẻ li khi nó được hover */
+ul li:hover {
+  background: rgb(199, 198, 198);
+}
+
+/* Định dạng button */
+.btn {
+  font-size: 16px;
+  right: 0;
+  top: 0;
+  padding: 6px 8px 6px 8px;
+  float: right;
+}
+
+.check:hover {
+  background-color: #5b92db;
+  color: white;
+}
+.delete:hover {
+  background-color: #f44336;
+  color: white;
+}
