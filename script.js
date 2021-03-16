@@ -1,120 +1,138 @@
 /* eslint-disable no-console */
-const insert = document.querySelector(".insertBtn");
-const createInputZone = () => {
-  const header = document.querySelector(".header");
-  const input = createElement("input", header, "inputZone");
-  input.setAttribute("placeholder", "Enter your activiti...");
-  // insert.parentNode.removeChild(insert);
-  insert.removeEventListener("click", createInputZone);
-  input.addEventListener("keypress", inputAction);
-};
-insert.addEventListener("click", createInputZone);
+export default class TodoList {
+  constructor() {
+    this.insert = document.querySelector(".insertBtn");
+    this.todoList = [];
+  }
 
-let todoList = [];
+  static initNode(element = "", parent = "", ClasseName = "") {
+    const e = document.createElement(element);
+    parent.appendChild(e);
+    e.className = ClasseName;
+    return e;
+  }
 
-// https://stackoverflow.com/questions/7060750/detect-the-enter-key-in-a-text-input-field
-function inputAction(event) {
-  const todo = {
-    titre: "",
-    check: false,
+  createInputZone() {
+    const header = document.querySelector(".header");
+    const input = TodoList.initNode("input", header, "inputZone");
+    input.setAttribute("placeholder", "Enter your activiti...");
+    this.parentNode.removeChild(this);
+    input.addEventListener("keypress", TodoList.addNewTodo);
+  }
+
+  addEventListenerForInsertButton = () => {
+    this.insert.addEventListener("click", this.createInputZone);
   };
-  const inputZone = document.querySelector(".inputZone");
-  if (event.key === "Enter") {
-    if (inputZone.value == "") alert("You must write something!");
-    const ul = document.querySelector("ul");
-    const li = createElement("li", ul);
-    const span = createElement("span", li);
-    span.innerText = inputZone.value;
-    todo.titre = span.textContent;
-    todoList.push(todo);
-    localStorage.setItem("myList", JSON.stringify(todoList));
-    inputZone.value = "";
 
-    const ed = createElement("button", li, "btn edit");
-    ed.innerText = "edit";
+  // https://stackoverflow.com/questions/7060750/detect-the-enter-key-in-a-text-input-field
+  static addNewTodo(event) {
+    const todo = {
+      titre: "",
+      check: false,
+    };
 
-    const del = createElement("i", li, "btn delete far fa-minus-square");
+    const inputZone = document.querySelector(".inputZone");
+    if (event.key === "Enter") {
+      if (inputZone.value == "") {
+        alert("You must write something!");
+        return;
+      }
+      const ul = document.querySelector("ul");
+      const li = TodoList.initNode("li", ul);
+      TodoList.initNode("span", li).innerText = inputZone.value;
+      todo.titre = inputZone.value;
+      inputZone.value = "";
 
-    const check = createElement("i", li, "btn check far fa-square");
-    check.setAttribute("id", "false");
-  }
-}
+      // TodoList.todoList.push(todo);
+      console.log(todo);
+      // localStorage.setItem("myList", JSON.stringify(todoList));
 
-function createElement(element = "", parent = null, ClasseName = "") {
-  const e = document.createElement(element);
-  parent.appendChild(e);
-  e.className = ClasseName;
-  return e;
-}
-
-// https://stackoverflow.com/questions/42761822/how-would-i-make-event-target-classname-check-for-an-image-inside-of-the-div-nam/42764518
-document.querySelector("ul").addEventListener("click", delegation);
-
-function delegation(e) {
-  if (e.target.classList.contains("delete")) removeActivity(e);
-  if (e.target.classList.contains("check")) checkActivity(e);
-  if (e.target.classList.contains("edit")) editActivity(e);
-}
-
-function removeActivity(e) {
-  const attention = confirm("do y want to delete it?");
-  if (attention) {
-    e.target.parentElement.remove();
-    const titre = e.target.previousSibling.previousSibling.textContent;
-    todoList = todoList.filter((item) => item.titre != titre);
-    localStorage.setItem("myList", JSON.stringify(todoList));
-  }
-}
-
-function checkActivity(e) {
-  switch (e.target.id) {
-    case "false":
-      updateCheckActivity(
-        e,
-        "true",
-        "btn check far fa-check-square",
-        "rgb(178, 217, 224)"
+      TodoList.initNode("button", li, "btn edit").innerText = "edit";
+      TodoList.initNode("i", li, "btn delete far fa-minus-square");
+      TodoList.initNode("i", li, "btn check far fa-square").setAttribute(
+        "id",
+        "false"
       );
-      break;
-    case "true":
-      updateCheckActivity(e, "false", "btn check far fa-square", "white");
-      break;
-  }
-}
-
-function updateCheckActivity(
-  e,
-  etatCheck = "false",
-  className = "",
-  backgroundColor = ""
-) {
-  e.target.id = etatCheck;
-  e.target.className = className;
-  e.target.parentElement.style.backgroundColor = backgroundColor;
-  const titre = e.target.parentElement.firstChild.textContent;
-  todoList = todoList.map((item) => {
-    if (item.titre == titre) {
-      if (etatCheck == "true") item.check = true;
-      else item.check = false;
     }
-    return item;
-  });
-  localStorage.setItem("myList", JSON.stringify(todoList));
-}
+  }
 
-function editActivity(e) {
-  const span = e.target.previousSibling;
-  const spanOldContent = span.textContent;
-  const newText = prompt("your text?", span.innerText);
-  if (newText == null || newText == "") alert("y must write something");
-  else {
-    span.innerText = newText;
+  // https://stackoverflow.com/questions/42761822/how-would-i-make-event-target-classname-check-for-an-image-inside-of-the-div-nam/42764518
+  addEventListenerForEachActivity() {
+    document.querySelector("ul").addEventListener("click", this.delegation);
+  }
+
+  delegation(e) {
+    console.log(this);
+    if (e.target.classList.contains("delete")) TodoList.removeActivity(e);
+    if (e.target.classList.contains("check")) TodoList.checkActivity(e);
+    if (e.target.classList.contains("edit")) TodoList.editActivity(e);
+  }
+
+  static removeActivity(e) {
+    const attention = confirm("do y want to delete it?");
+    if (attention) {
+      e.target.parentElement.remove();
+      const titre = e.target.previousSibling.previousSibling.textContent;
+      todoList = todoList.filter((item) => item.titre != titre);
+      localStorage.setItem("myList", JSON.stringify(todoList));
+    }
+  }
+
+  static checkActivity(e) {
+    switch (e.target.id) {
+      case "false":
+        TodoList.updateCheckActivity(
+          e,
+          "true",
+          "btn check far fa-check-square",
+          "rgb(178, 217, 224)"
+        );
+        break;
+      case "true":
+        TodoList.updateCheckActivity(
+          e,
+          "false",
+          "btn check far fa-square",
+          "white"
+        );
+        break;
+    }
+  }
+
+  static updateCheckActivity(
+    e,
+    etatCheck = "false",
+    className = "",
+    backgroundColor = ""
+  ) {
+    e.target.id = etatCheck;
+    e.target.className = className;
+    e.target.parentElement.style.backgroundColor = backgroundColor;
+    const titre = e.target.parentElement.firstChild.textContent;
     todoList = todoList.map((item) => {
-      if (item.titre == spanOldContent) {
-        item.titre = newText;
+      if (item.titre == titre) {
+        if (etatCheck == "true") item.check = true;
+        else item.check = false;
       }
       return item;
     });
     localStorage.setItem("myList", JSON.stringify(todoList));
+  }
+
+  static editActivity(e) {
+    const span = e.target.previousSibling;
+    const spanOldContent = span.textContent;
+    const newText = prompt("your text?", span.innerText);
+    if (newText == null || newText == "") alert("y must write something");
+    else {
+      span.innerText = newText;
+      todoList = todoList.map((item) => {
+        if (item.titre == spanOldContent) {
+          item.titre = newText;
+        }
+        return item;
+      });
+      localStorage.setItem("myList", JSON.stringify(todoList));
+    }
   }
 }
