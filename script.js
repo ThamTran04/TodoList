@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 export default class TodoList {
-  constructor() {
-    this.insert = document.querySelector(".insertBtn");
-    this.todoList = [];
+  static todoList = [];
+
+  static getTodoList() {
+    return this.todoList;
   }
 
   static initNode(element = "", parent = "", ClasseName = "") {
@@ -21,7 +22,9 @@ export default class TodoList {
   }
 
   addEventListenerForInsertButton = () => {
-    this.insert.addEventListener("click", this.createInputZone);
+    document
+      .querySelector(".insertBtn")
+      .addEventListener("click", this.createInputZone);
   };
 
   // https://stackoverflow.com/questions/7060750/detect-the-enter-key-in-a-text-input-field
@@ -42,10 +45,8 @@ export default class TodoList {
       TodoList.initNode("span", li).innerText = inputZone.value;
       todo.titre = inputZone.value;
       inputZone.value = "";
-
-      // TodoList.todoList.push(todo);
-      console.log(todo);
-      // localStorage.setItem("myList", JSON.stringify(todoList));
+      TodoList.todoList.push(todo);
+      localStorage.setItem("myList", JSON.stringify(TodoList.todoList));
 
       TodoList.initNode("button", li, "btn edit").innerText = "edit";
       TodoList.initNode("i", li, "btn delete far fa-minus-square");
@@ -62,7 +63,6 @@ export default class TodoList {
   }
 
   delegation(e) {
-    console.log(this);
     if (e.target.classList.contains("delete")) TodoList.removeActivity(e);
     if (e.target.classList.contains("check")) TodoList.checkActivity(e);
     if (e.target.classList.contains("edit")) TodoList.editActivity(e);
@@ -73,8 +73,10 @@ export default class TodoList {
     if (attention) {
       e.target.parentElement.remove();
       const titre = e.target.previousSibling.previousSibling.textContent;
-      todoList = todoList.filter((item) => item.titre != titre);
-      localStorage.setItem("myList", JSON.stringify(todoList));
+      TodoList.todoList = TodoList.todoList.filter(
+        (item) => item.titre != titre
+      );
+      localStorage.setItem("myList", JSON.stringify(TodoList.todoList));
     }
   }
 
@@ -109,14 +111,14 @@ export default class TodoList {
     e.target.className = className;
     e.target.parentElement.style.backgroundColor = backgroundColor;
     const titre = e.target.parentElement.firstChild.textContent;
-    todoList = todoList.map((item) => {
+    TodoList.todoList = TodoList.todoList.map((item) => {
       if (item.titre == titre) {
         if (etatCheck == "true") item.check = true;
         else item.check = false;
       }
       return item;
     });
-    localStorage.setItem("myList", JSON.stringify(todoList));
+    localStorage.setItem("myList", JSON.stringify(TodoList.todoList));
   }
 
   static editActivity(e) {
@@ -126,13 +128,13 @@ export default class TodoList {
     if (newText == null || newText == "") alert("y must write something");
     else {
       span.innerText = newText;
-      todoList = todoList.map((item) => {
+      TodoList.todoList = TodoList.todoList.map((item) => {
         if (item.titre == spanOldContent) {
           item.titre = newText;
         }
         return item;
       });
-      localStorage.setItem("myList", JSON.stringify(todoList));
+      localStorage.setItem("myList", JSON.stringify(TodoList.todoList));
     }
   }
 }
