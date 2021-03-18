@@ -1,14 +1,25 @@
 /* eslint-disable no-console */
-export default class TodoList {
-  static todoList = [];
-
-  static getTodoList() {
-    return this.todoList;
+export default class TodoList extends HTMLElement {
+  constructor() {
+    super();
   }
 
-  static initNode(element = "", parent = "", ClasseName = "") {
+  connectedCallback() {
+    const body = document.querySelector("body");
+    const container = TodoList.initNode("div", body, "container");
+    const header = TodoList.initNode("div", container, "header");
+    TodoList.initNode("h2", header).innerText = "List To Do";
+    const insertButton = TodoList.initNode("button", header, "insertBtn");
+    insertButton.innerText = "Insert";
+    const ul = TodoList.initNode("ul", container);
+    insertButton.addEventListener("click", this.createInputZone);
+    ul.addEventListener("click", this.delegation);
+  }
+
+  static todoList = [];
+  static initNode(element = "", parentNode = "", ClasseName = "") {
     const e = document.createElement(element);
-    parent.appendChild(e);
+    parentNode.appendChild(e);
     e.className = ClasseName;
     return e;
   }
@@ -20,12 +31,6 @@ export default class TodoList {
     this.parentNode.removeChild(this);
     input.addEventListener("keypress", TodoList.addNewTodo);
   }
-
-  addEventListenerForInsertButton = () => {
-    document
-      .querySelector(".insertBtn")
-      .addEventListener("click", this.createInputZone);
-  };
 
   // https://stackoverflow.com/questions/7060750/detect-the-enter-key-in-a-text-input-field
   static addNewTodo(event) {
@@ -58,9 +63,6 @@ export default class TodoList {
   }
 
   // https://stackoverflow.com/questions/42761822/how-would-i-make-event-target-classname-check-for-an-image-inside-of-the-div-nam/42764518
-  addEventListenerForEachActivity() {
-    document.querySelector("ul").addEventListener("click", this.delegation);
-  }
 
   delegation(e) {
     if (e.target.classList.contains("delete")) TodoList.removeActivity(e);
@@ -138,3 +140,5 @@ export default class TodoList {
     }
   }
 }
+
+customElements.define("todo-list", TodoList);
