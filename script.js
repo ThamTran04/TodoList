@@ -5,8 +5,9 @@ export default class TodoList extends HTMLElement {
   }
 
   connectedCallback() {
-    const body = document.querySelector("body");
-    const container = TodoList.initNode("div", body, "container");
+    const container = document.createElement("div");
+    container.className = "container";
+    this.appendChild(container);
     const header = TodoList.initNode("div", container, "header");
     TodoList.initNode("h2", header).innerText = "List To Do";
     const insertButton = TodoList.initNode("button", header, "insertBtn");
@@ -26,10 +27,10 @@ export default class TodoList extends HTMLElement {
 
   createInputZone() {
     const header = document.querySelector(".header");
-    const input = TodoList.initNode("input", header, "inputZone");
-    input.setAttribute("placeholder", "Enter your activiti...");
+    const inputZone = TodoList.initNode("input", header, "inputZone");
+    inputZone.setAttribute("placeholder", "Enter your activiti...");
     this.parentNode.removeChild(this);
-    input.addEventListener("keypress", TodoList.addNewTodo);
+    inputZone.addEventListener("keypress", TodoList.addNewTodo);
   }
 
   // https://stackoverflow.com/questions/7060750/detect-the-enter-key-in-a-text-input-field
@@ -39,17 +40,17 @@ export default class TodoList extends HTMLElement {
       check: false,
     };
 
-    const inputZone = document.querySelector(".inputZone");
+    // const inputZone = document.querySelector(".inputZone");
     if (event.key === "Enter") {
-      if (inputZone.value == "") {
+      if (this.value == "") {
         alert("You must write something!");
         return;
       }
       const ul = document.querySelector("ul");
       const li = TodoList.initNode("li", ul);
-      TodoList.initNode("span", li).innerText = inputZone.value;
-      todo.titre = inputZone.value;
-      inputZone.value = "";
+      TodoList.initNode("span", li).innerText = this.value;
+      todo.titre = this.value;
+      this.value = "";
       TodoList.todoList.push(todo);
       localStorage.setItem("myList", JSON.stringify(TodoList.todoList));
 
@@ -141,4 +142,4 @@ export default class TodoList extends HTMLElement {
   }
 }
 
-customElements.define("todo-list", TodoList);
+customElements.define("my-todo-list", TodoList);
