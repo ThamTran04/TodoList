@@ -30,6 +30,10 @@
   font-size: 20px;
 }
 
+h1 {
+  color: blue;
+}
+
 h2 {
   margin: 5px;
 }

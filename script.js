@@ -3,18 +3,25 @@ export default class TodoList extends HTMLElement {
   constructor() {
     super();
   }
+  /*
+  <div class="container">
+    <div class="header">
+      <h2>List To Do</h2>
+      <button class="insertBtn">Insert</button>
+    </div>
 
+    <ul id="myUL"></ul>
+  </div>
+  */
   connectedCallback() {
-    const container = document.createElement("div");
-    container.className = "container";
-    this.appendChild(container);
+    const container = TodoList.initNode("div", this, "container");
     const header = TodoList.initNode("div", container, "header");
     TodoList.initNode("h2", header).innerText = "List To Do";
     const insertButton = TodoList.initNode("button", header, "insertBtn");
     insertButton.innerText = "Insert";
     const ul = TodoList.initNode("ul", container);
     insertButton.addEventListener("click", this.createInputZone);
-    ul.addEventListener("click", this.delegation);
+    ul.addEventListener("click", this.delegateClick);
   }
 
   static todoList = [];
@@ -64,8 +71,7 @@ export default class TodoList extends HTMLElement {
   }
 
   // https://stackoverflow.com/questions/42761822/how-would-i-make-event-target-classname-check-for-an-image-inside-of-the-div-nam/42764518
-
-  delegation(e) {
+  delegateClick(e) {
     if (e.target.classList.contains("delete")) TodoList.removeActivity(e);
     if (e.target.classList.contains("check")) TodoList.checkActivity(e);
     if (e.target.classList.contains("edit")) TodoList.editActivity(e);

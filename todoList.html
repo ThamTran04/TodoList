@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <script defer type="module" src="script.js"></script>
+    <script defer type="module" src="main.js"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
@@ -13,14 +13,17 @@
   </head>
 
   <body>
-    <my-todo-list></my-todo-list>
-    <!-- <div class="container">
-    <div class="header">
-      <h2>List To Do</h2>
-      <button class="insertBtn">Insert</button>
-    </div>
+    <template id="gabari">
+      <h1 style="color: black">Test Template HTML</h1>
+      <my-todo-list></my-todo-list>
+    </template>
 
-    <ul id="myUL"></ul>
-  </div> -->
+    <script>
+      const content = document.querySelector("#gabari").content;
+      // const TodoList = content.querySelector("my-todo-list").cloneNode(true);
+      // document.querySelector("body").appendChild(TodoList);
+      const clone = content.cloneNode(true);
+      document.querySelector("body").appendChild(clone);
+    </script>
   </body>
 </html>
